@@ -1,0 +1,9 @@
+<launch>
+  <node pkg="serial_control" name="serial_485" type="serial_485" output="screen" >
+    <!-- 是否输出debug信息 -->
+    <param name="motor_spped_max"  value="3000"/>
+    <param name="wheel_radius"  value="0.08"/>
+    <param name="dis_between_bell"  value="0.704"/>   
+    <param name="PI"  value="3.1415926"/>   
+  </node>
+</launch> 
