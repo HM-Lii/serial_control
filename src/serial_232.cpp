@@ -19,14 +19,18 @@ class SerialInterface {
   RecMessage ReadMsg;
   std::string port;
   int baudrate;
-  int n_max = 3000;
-  float r = 0.08, PI = 3.1415926, B = 0.704;
+  int n_max = 3000,ratio=20;
+  double radius_wheel = 0.08, PI = 3.1415926, B = 0.704;
 
  public:
   SerialInterface(ros::NodeHandle& nh_) {
     try {
       nh_.param("/serial_232/port", port, std::string("/dev/ttyUSB0"));
       nh_.param("/serial_232/baudrate", baudrate, 115200);
+      nh_.param("/serial_232/n_max", n_max, 3000);
+      nh_.param("/serial_232/ratio", ratio, 20);
+      nh_.param("/serial_232/dis_between_bell", B, 0.704);
+      nh_.param("/serial_232/wheel_radius", B, 0.08);
       std::cout << "port: " << port << std::endl;
       ser.setPort(port);
       ser.setBaudrate(baudrate);
@@ -43,9 +47,6 @@ class SerialInterface {
     }
     if (ser.isOpen()) {
       ROS_INFO_STREAM("Serial Port initialized");
-      ros::param::get("motor_spped_max", n_max);
-      ros::param::get("wheel_radius", r);
-      ros::param::get("dis_between_bell", B);
     }
   }
   ~SerialInterface() {}
@@ -139,9 +140,9 @@ class SerialInterface {
     Eigen::Vector2d k, m;
     A << 1, B / 2, 1, -B / 2;
     k << v, w;
-    m = (60/20) * (1 / (2 * PI * r)) * A * k;
-    n_a = m[0];
-    n_b = m[1];
+    m = 60*ratio * (1 / (2 * PI * radius_wheel)) * A * k;
+    n_a = m[1];
+    n_b = m[0];
   }
   void CmdVelCallback(const geometry_msgs::Twist::ConstPtr &msg) {
     // ROS_INFO("I heard: [%f] , [%f] ", msg->linear.x, msg->angular.z);

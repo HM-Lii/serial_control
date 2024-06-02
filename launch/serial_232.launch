@@ -1,6 +1,10 @@
 <launch>
   <node name="serial_232" pkg="serial_control" type="serial_232" output="screen">
-    <param name="port" value="/dev/ttyUSB1" />
+    <param name="port" value="/dev/ttyUSB4" />
     <param name="baudrate" value="115200" />
+    <param name="n_max" value="3000" />
+    <param name="ratio" value="20" />
+    <param name="dis_between_bell" value="0.704" />
+    <param name="wheel_radius" value="0.08" />
   </node>
 </launch>
